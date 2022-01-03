@@ -7,6 +7,7 @@ package com.codetest.demo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 //@SpringBootApplication
 public class DemoApplication {
 
@@ -14,12 +15,10 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 
-		BundleCalculator bundleCalculator = new BundleCalculator();
-		String bestBundles = bundleCalculator.bestBundle("37 FLAC");
+		Bundle bundle = new Bundle();
 
-
-		logger.info(bestBundles);
-
+		String str = bundle.bestBundle(26, "IMG");
+		System.out.println(str);
 
 
 	}

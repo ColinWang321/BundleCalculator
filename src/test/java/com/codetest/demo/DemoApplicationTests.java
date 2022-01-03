@@ -9,50 +9,30 @@ import org.slf4j.LoggerFactory;
 //@SpringBootTest
 class DemoApplicationTests {
 
-	BundleCalculator bundleCalculator = new BundleCalculator();
 	Logger logger = LoggerFactory.getLogger(getClass());
-
+	Bundle bundle = new Bundle();
 
 	@Test
 	void testCorrectOutput() {
-		String bestBundle = bundleCalculator.bestBundle("26 IMG");
-
-		logger.info(" : Best bundle test result for '26 IMG' is: " + bestBundle);
-
-//		logger.trace("This is trace log...");
-//		logger.debug("This is debug log...");
-//		logger.info("This is info log...");
-//		logger.warn("This is warn log...");
-//		logger.error("This is error log...");
-
-//		System.out.println(bestBundle);
+		String str = bundle.bestBundle(14, "IMG");
+		logger.info("Test Correct Output result: " + str);
 	}
 
 	@Test
-	void testWrongInput(){
-		String bestBundleWrongInput = bundleCalculator.bestBundle("26 IMGslkdjflkasj");
-
-		logger.info(" : Test for '26 IMGslkdjflkasj', result is: " + bestBundleWrongInput);
+	void testWrongNumber() {
+		String str = bundle.bestBundle(-1, "IMG");
+		logger.info("Test Wrong Number result: " + str);
 	}
 
 	@Test
-	void testRedundantInput(){
-		String bestBundleRedundantInput = bundleCalculator.bestBundle("26 IMG slkdjflkasj");
-
-		logger.info(" : Test for '26 IMG slkdjflkasj', result is: " + bestBundleRedundantInput);
+	void testWrongType() {
+		String str = bundle.bestBundle(23, "IMGG");
+		logger.info("Test Wrong Type result: " + str);
 	}
 
 	@Test
-	void testZeroNumberInput(){
-		String bestBundleZeroNumber = bundleCalculator.bestBundle("0 IMG");
-
-		logger.info(" : Test for '0 IMG', result is: " + bestBundleZeroNumber);
-	}
-
-	@Test
-	void testWrongNumberInput(){
-		String bestBundleWrongNumber = bundleCalculator.bestBundle("-55 IMG");
-
-		logger.info(" : Test for '-55 IMG', result is: " + bestBundleWrongNumber);
+	void testNullType() {
+		String str = bundle.bestBundle(23, "");
+		logger.info("Test Null Type result: " + str);
 	}
 }
