@@ -12,12 +12,14 @@ Video | VID | 3 @ $570 5 @ $900 9 @ $1530
 
 ## How to use it
 When you download the project, you need to build a new Bundle class, then use the 'bestBundle(int number, String type)' function.
+
 Type should be one of the above "IMG", "FLAC", or "VID".
+
 This function will return the result as a string.
 
 Sample is below:
 
-public static void main(String[] args) {
+	public static void main(String[] args) {
 
 		Bundle bundle = new Bundle();
 
