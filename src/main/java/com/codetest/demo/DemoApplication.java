@@ -18,7 +18,7 @@ public class DemoApplication {
 		Bundle bundle = new Bundle();
 
 		String str = bundle.bestBundle(26, "IMG");
-		System.out.println(str);
+		logger.info(str);
 
 
 	}

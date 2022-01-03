@@ -95,7 +95,7 @@ public class Bundle {
                 outputBundleString = "Number should be bigger than 0!";
             }
         }else{
-            outputBundleString = "Input type is not included in the format array!";
+            outputBundleString = "Input type is not included in the format array! It should be 'IMG', 'FLAC', or 'VID'";
         }
 
         return outputBundleString;
