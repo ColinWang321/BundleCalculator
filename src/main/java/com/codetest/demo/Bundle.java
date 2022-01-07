@@ -6,62 +6,60 @@ import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 @Getter
 @Setter
-// This is the output class.
-//  Order: An object, contains bundle format, bundles, and bundle prices.
 public class Bundle {
     Order order = new Order();
-
-    // Logger
     Logger logger = LoggerFactory.getLogger(getClass());
 
 
 
-    //========================== Function 1 - Utility function ========================
-    // Used in function "calBundle", store numbers you calculated.
-    ArrayList<Integer> bundleNumberArray = new ArrayList<>();
 
-    // subFunction
-    //      input parameters like "14" and bundle array {10, 5}, calculate best bundles.
-    // Main idea is division and get the remainder.
-    //      For example, 14/10 = 1, remainder is 4. Then 4/5 = 0, remainder is 4.
-    //      Then result should be 1x10; 1x5;
-    public String calBundle(int inputNumber, int[] bundleArray) {
-        int bundleRemainder = inputNumber;                                  // Bundle remainder, store remainder when calculate
-        StringBuilder bundleOutputString = new StringBuilder();             // The output String
 
-        if(bundleArray.length > 0){
-            // calculate, store result in an array.
-            for (int j : bundleArray) {                                     // Tips for Colin: Advanced For Loop. Quick fixed by Intellij.
-                bundleNumberArray.add(bundleRemainder / j);                 //array.add(14/10)
-                bundleRemainder = bundleRemainder % j;                      //remainder = 4;
+    public String calBundle(int inputNumber, String type, int[] presetBundles, double[] presetPrices) {
+        ArrayList<Integer> bundleNumberArray = new ArrayList<>();
+        int bundleRemainderForCalculate = inputNumber;
+        StringBuilder bundleOutputString = new StringBuilder();
+
+        if(presetBundles.length > 0){
+            for (int j : presetBundles) {
+                bundleNumberArray.add(bundleRemainderForCalculate / j);
+                bundleRemainderForCalculate = bundleRemainderForCalculate % j;
             }
-            // If remainder not 0, then should add the smallest bundle to bundle number array.
-            if(bundleRemainder != 0){
+            if(bundleRemainderForCalculate != 0){
                 int lastNumber = bundleNumberArray.get(bundleNumberArray.size() - 1);
                 bundleNumberArray.set(bundleNumberArray.size() - 1, lastNumber + 1);
             }
-            // output the result in a String
+            int totalPrice = 0;
+            StringBuilder lineString = new StringBuilder();
             for (int i = 0; i < bundleNumberArray.size(); i++) {
                 if(bundleNumberArray.get(i) != 0){
-                    bundleOutputString.append(bundleNumberArray.get(i)).append(" x ").append(bundleArray[i]).append("; ");
+                    int bundleNumber = bundleNumberArray.get(i);
+                    double bundlePrice = presetPrices[i];
+                    double linePrice = bundleNumber * bundlePrice;
+                    totalPrice += linePrice;
+                    lineString.append("| ").append(bundleNumber).append(" x ").append(presetBundles[i])
+                            .append(" $").append(bundlePrice).append("\n");
                 }
             }
+            bundleOutputString.append(inputNumber).append(" ").append(type).append(" $").append(totalPrice).append("\n")
+                    .append(lineString);
         }else{
             bundleOutputString = new StringBuilder("Bundle Array is empty!");
         }
-
         return bundleOutputString.toString();
     }
 
 
-    //========================== Function 2 - Utility function ========================
-    // Utility function: IndexOf.
-    // Return the index if the String is in a String[];
+
     public int indexOf(String[] format, String str){
         int index = -1;
         for (int i = 0; i < format.length; i++) {
@@ -75,22 +73,21 @@ public class Bundle {
 
 
 
-    //========================== Function 3 - Main function ========================
 
-    String[] format = order.getFormat();                //  {"IMG", "FLAC", "VID"}
-    int[][] bundles = order.getBundles();               //  {{10,5}, {9,6,3}, {9,5,3}}
-    double[][] prices = order.getPrices();              //  {{800,450}, {1147.50,810,427.50}, {1530,900,570}}
 
-    // Main function
-    // When user input Parameter like "14, IMG", output the best bundles.
-    public String bestBundle(int number, String type) {
+    public String singleBundle(int number, String type) {
+        String[] format = order.getFormat();
+        int[][] bundles = order.getBundles();
+        double[][] prices = order.getPrices();
         int index = this.indexOf(format, type);
-        String outputBundleString;      // Output String
+        String outputBundleString;
 
         if(index != -1){
             if(number > 0){
                 int[] bundle = bundles[index];
-                outputBundleString = "Best bundle for '" + number + " " + type + "' is: " + calBundle(number, bundle);
+                double[] price = prices[index];
+//                outputBundleString = "Best bundle for '" + number + " " + type + "' is: " + calBundle(number, bundle);
+                outputBundleString = calBundle(number, type, bundle, price);
             }else{
                 outputBundleString = "Number should be bigger than 0!";
             }
@@ -102,4 +99,38 @@ public class Bundle {
     }
 
 
+
+    public String calBestBundlesFromTxtFile(String filename){
+        String message;
+        ArrayList<Integer> numberStoreArray = new ArrayList<>();
+        ArrayList<String> typeStoreArray = new ArrayList<>();
+        try {
+            File bundleFile = new File(filename);
+            Scanner bundleReader = new Scanner(bundleFile);
+            while(bundleReader.hasNextLine()){
+                String data = bundleReader.nextLine();
+                String[] singleLineElements = data.split(" ");
+                numberStoreArray.add(Integer.parseInt(singleLineElements[0]));
+                typeStoreArray.add(singleLineElements[1]);
+            }
+
+            FileWriter bundleWriter = new FileWriter("bundle result.txt");
+            for (int i = 0; i < numberStoreArray.size(); i++) {
+                bundleWriter.write(singleBundle(numberStoreArray.get(i), typeStoreArray.get(i)));
+            }
+            bundleWriter.close();
+            singleBundle(numberStoreArray.get(0), typeStoreArray.get(0));
+
+            message = "Calculate completed! Please check the 'bundle result.txt' in same directory!";
+        }catch (FileNotFoundException e){
+            logger.error("File Not Found!");
+            message = "There's no such file named " + filename;
+            e.printStackTrace();
+        } catch (IOException e) {
+            message = "Write file failed.";
+            e.printStackTrace();
+        }
+
+        return message;
+    }
 }
