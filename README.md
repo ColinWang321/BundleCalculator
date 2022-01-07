@@ -11,7 +11,7 @@ Audio | Flac | 3 @ $427.50 6 @ $810 9 @ $1147.50
 Video | VID | 3 @ $570 5 @ $900 9 @ $1530
 
 ## How to use it
-User can use this project by creating a "bundle.txt" in the same directory. 
+1. Create a "bundle.txt" in the same directory. 
 
 ![bundle 0](https://user-images.githubusercontent.com/83932602/148603010-5ba7cc76-cd49-4d00-a5e6-c538fc9f183b.jpg)
 
@@ -21,12 +21,12 @@ Format should be like this.
 ![bundle 1](https://user-images.githubusercontent.com/83932602/148602926-db73306b-a161-4260-8634-e42595f8eb39.jpg)
 
 
-Open project in Intellij or other IDEA software, run the main function.
+2. Open project in Intellij or other IDEA software, run the main function.
 
 ![bundle 2](https://user-images.githubusercontent.com/83932602/148603153-01bb5aa3-6c0c-4bc7-8518-8cc536af05eb.jpg)
 
 
-Then you can get a "bundle result.txt" in project directory.
+Result will be stored in a "bundle result.txt" file in project directory.
 
 ![bundle 3](https://user-images.githubusercontent.com/83932602/148603492-f76ecfc9-df41-4047-877c-2a171fb88190.jpg)
 
