@@ -17,44 +17,8 @@ import java.util.Scanner;
 @Getter
 @Setter
 public class Bundle {
-    Order order = new Order();
+
     Logger logger = LoggerFactory.getLogger(getClass());
-
-
-    public String calBundle(int inputNumber, String type, int[] presetBundles, double[] presetPrices) {
-        ArrayList<Integer> bundleNumberArray = new ArrayList<>();
-        int bundleRemainderForCalculate = inputNumber;
-        StringBuilder bundleOutputString = new StringBuilder();
-
-        if (presetBundles.length > 0) {
-            for (int j : presetBundles) {
-                bundleNumberArray.add(bundleRemainderForCalculate / j);
-                bundleRemainderForCalculate = bundleRemainderForCalculate % j;
-            }
-            if (bundleRemainderForCalculate != 0) {
-                int lastNumber = bundleNumberArray.get(bundleNumberArray.size() - 1);
-                bundleNumberArray.set(bundleNumberArray.size() - 1, lastNumber + 1);
-            }
-            int totalPrice = 0;
-            StringBuilder lineString = new StringBuilder();
-            for (int i = 0; i < bundleNumberArray.size(); i++) {
-                if (bundleNumberArray.get(i) != 0) {
-                    int bundleNumber = bundleNumberArray.get(i);
-                    double bundlePrice = presetPrices[i];
-                    double linePrice = bundleNumber * bundlePrice;
-                    totalPrice += linePrice;
-                    lineString.append("| ").append(bundleNumber).append(" x ").append(presetBundles[i])
-                            .append(" $").append(bundlePrice).append("\n");
-                }
-            }
-            bundleOutputString.append(inputNumber).append(" ").append(type).append(" $").append(totalPrice).append("\n")
-                    .append(lineString);
-        } else {
-            bundleOutputString = new StringBuilder("Bundle Array is empty!");
-        }
-        return bundleOutputString.toString();
-    }
-
 
     public int indexOf(String[] format, String str) {
         int index = -1;
@@ -67,30 +31,58 @@ public class Bundle {
         return index;
     }
 
+    public ArrayList<Integer> calBundle(int number, String type, Order order) {
+        ArrayList<Integer> calculatedNumbers = new ArrayList<>();
+        int bundleRemainderInCalculateProcess = number;
 
-    public String singleBundle(int number, String type) {
-        String[] format = order.getFormat();
-        int[][] bundles = order.getBundles();
-        double[][] prices = order.getPrices();
-        int index = this.indexOf(format, type);
-        String outputBundleString;
+        try {
+            int index = indexOf(order.getTypes(), type.toUpperCase());
+            int[] presetBundles = order.getBundles()[index];
 
-        if (index != -1) {
-            if (number > 0) {
-                int[] bundle = bundles[index];
-                double[] price = prices[index];
-                outputBundleString = calBundle(number, type, bundle, price);
-            } else {
-                outputBundleString = "Number should be bigger than 0!";
+            if (presetBundles.length > 0) {
+                for (int j : presetBundles) {
+                    calculatedNumbers.add(bundleRemainderInCalculateProcess / j);
+                    bundleRemainderInCalculateProcess = bundleRemainderInCalculateProcess % j;
+                }
+                if (bundleRemainderInCalculateProcess != 0) {
+                    int lastNumber = calculatedNumbers.get(calculatedNumbers.size() - 1);
+                    calculatedNumbers.set(calculatedNumbers.size() - 1, lastNumber + 1);
+                }
             }
-        } else {
-            outputBundleString = "Input type is not included in the format array! It should be 'IMG', 'FLAC', or 'VID'";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        return outputBundleString;
+        return calculatedNumbers;
+    }
+
+
+    public String combineString(int number, String type, ArrayList<Integer> calculatedNumbers, Order order) {
+        int totalPrice = 0;
+        StringBuilder bundleString = new StringBuilder();
+        StringBuilder lineString = new StringBuilder();
+        int index = indexOf(order.getTypes(), type.toUpperCase());
+        int[] bundles = order.getBundles()[index];
+        double[] prices = order.getPrices()[index];
+
+
+        for (int i = 0; i < calculatedNumbers.size(); i++) {
+            if (calculatedNumbers.get(i) != 0) {
+                int numberInLine = calculatedNumbers.get(i);
+                double priceInLine = numberInLine * prices[i];
+                totalPrice += priceInLine;
+                lineString.append("| ").append(numberInLine).append(" x ").append(bundles[i])
+                        .append(" $").append(priceInLine).append("\n");
+            }
+        }
+        bundleString.append(number).append(" ").append(type).append(" $").append(totalPrice).append("\n")
+                .append(lineString);
+
+        return bundleString.toString();
     }
 
 
     public String calBestBundlesFromTxtFile(String filename) {
+        Order order = new Order();
         String message;
         ArrayList<Integer> numberStoreArray = new ArrayList<>();
         ArrayList<String> typeStoreArray = new ArrayList<>();
@@ -106,14 +98,18 @@ public class Bundle {
 
             FileWriter bundleWriter = new FileWriter("bundle result.txt");
             for (int i = 0; i < numberStoreArray.size(); i++) {
-                bundleWriter.write(singleBundle(numberStoreArray.get(i), typeStoreArray.get(i)));
+                int number = numberStoreArray.get(i);
+                String type = typeStoreArray.get(i);
+
+                ArrayList<Integer> calculatedNumbers = calBundle(number, type, order);
+                String singleBundleString = combineString(number, type, calculatedNumbers, order);
+                bundleWriter.write(singleBundleString);
             }
             bundleWriter.close();
-            singleBundle(numberStoreArray.get(0), typeStoreArray.get(0));
+
 
             message = "Calculate completed! Please check the 'bundle result.txt' in same directory!";
         } catch (FileNotFoundException e) {
-            logger.error("File Not Found!");
             message = "There's no such file named " + filename;
             e.printStackTrace();
         } catch (IOException e) {
