@@ -21,27 +21,24 @@ public class Bundle {
     Logger logger = LoggerFactory.getLogger(getClass());
 
 
-
-
-
     public String calBundle(int inputNumber, String type, int[] presetBundles, double[] presetPrices) {
         ArrayList<Integer> bundleNumberArray = new ArrayList<>();
         int bundleRemainderForCalculate = inputNumber;
         StringBuilder bundleOutputString = new StringBuilder();
 
-        if(presetBundles.length > 0){
+        if (presetBundles.length > 0) {
             for (int j : presetBundles) {
                 bundleNumberArray.add(bundleRemainderForCalculate / j);
                 bundleRemainderForCalculate = bundleRemainderForCalculate % j;
             }
-            if(bundleRemainderForCalculate != 0){
+            if (bundleRemainderForCalculate != 0) {
                 int lastNumber = bundleNumberArray.get(bundleNumberArray.size() - 1);
                 bundleNumberArray.set(bundleNumberArray.size() - 1, lastNumber + 1);
             }
             int totalPrice = 0;
             StringBuilder lineString = new StringBuilder();
             for (int i = 0; i < bundleNumberArray.size(); i++) {
-                if(bundleNumberArray.get(i) != 0){
+                if (bundleNumberArray.get(i) != 0) {
                     int bundleNumber = bundleNumberArray.get(i);
                     double bundlePrice = presetPrices[i];
                     double linePrice = bundleNumber * bundlePrice;
@@ -52,27 +49,23 @@ public class Bundle {
             }
             bundleOutputString.append(inputNumber).append(" ").append(type).append(" $").append(totalPrice).append("\n")
                     .append(lineString);
-        }else{
+        } else {
             bundleOutputString = new StringBuilder("Bundle Array is empty!");
         }
         return bundleOutputString.toString();
     }
 
 
-
-    public int indexOf(String[] format, String str){
+    public int indexOf(String[] format, String str) {
         int index = -1;
         for (int i = 0; i < format.length; i++) {
-            if(format[i].equals(str)){
+            if (format[i].equals(str)) {
                 index = i;
                 break;
             }
         }
         return index;
     }
-
-
-
 
 
     public String singleBundle(int number, String type) {
@@ -82,32 +75,29 @@ public class Bundle {
         int index = this.indexOf(format, type);
         String outputBundleString;
 
-        if(index != -1){
-            if(number > 0){
+        if (index != -1) {
+            if (number > 0) {
                 int[] bundle = bundles[index];
                 double[] price = prices[index];
-//                outputBundleString = "Best bundle for '" + number + " " + type + "' is: " + calBundle(number, bundle);
                 outputBundleString = calBundle(number, type, bundle, price);
-            }else{
+            } else {
                 outputBundleString = "Number should be bigger than 0!";
             }
-        }else{
+        } else {
             outputBundleString = "Input type is not included in the format array! It should be 'IMG', 'FLAC', or 'VID'";
         }
-
         return outputBundleString;
     }
 
 
-
-    public String calBestBundlesFromTxtFile(String filename){
+    public String calBestBundlesFromTxtFile(String filename) {
         String message;
         ArrayList<Integer> numberStoreArray = new ArrayList<>();
         ArrayList<String> typeStoreArray = new ArrayList<>();
         try {
             File bundleFile = new File(filename);
             Scanner bundleReader = new Scanner(bundleFile);
-            while(bundleReader.hasNextLine()){
+            while (bundleReader.hasNextLine()) {
                 String data = bundleReader.nextLine();
                 String[] singleLineElements = data.split(" ");
                 numberStoreArray.add(Integer.parseInt(singleLineElements[0]));
@@ -122,7 +112,7 @@ public class Bundle {
             singleBundle(numberStoreArray.get(0), typeStoreArray.get(0));
 
             message = "Calculate completed! Please check the 'bundle result.txt' in same directory!";
-        }catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             logger.error("File Not Found!");
             message = "There's no such file named " + filename;
             e.printStackTrace();
@@ -130,7 +120,6 @@ public class Bundle {
             message = "Write file failed.";
             e.printStackTrace();
         }
-
         return message;
     }
 }

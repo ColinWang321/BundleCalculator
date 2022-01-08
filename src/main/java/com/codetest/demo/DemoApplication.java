@@ -7,16 +7,16 @@ import org.slf4j.LoggerFactory;
 
 public class DemoApplication {
 
-	static Logger logger = LoggerFactory.getLogger(DemoApplication.class);
+    static Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		Bundle bundle = new Bundle();
+        Bundle bundle = new Bundle();
 
-		String str = bundle.calBestBundlesFromTxtFile("bundle.txt");
-		logger.info(str);
+        String str = bundle.calBestBundlesFromTxtFile("bundle.txt");
+        logger.info(str);
 
 
-	}
+    }
 
 }
