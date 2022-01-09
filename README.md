@@ -16,7 +16,7 @@ Video | VID | 3 @ $570 5 @ $900 9 @ $1530
 ![bundle 0](https://user-images.githubusercontent.com/83932602/148603010-5ba7cc76-cd49-4d00-a5e6-c538fc9f183b.jpg)
 
 
-Format should be like this.
+Format should be like this, a number and a type in one line, separated with a space.
 
 ![bundle 1](https://user-images.githubusercontent.com/83932602/148602926-db73306b-a161-4260-8634-e42595f8eb39.jpg)
 
