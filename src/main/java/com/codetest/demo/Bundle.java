@@ -20,6 +20,10 @@ public class Bundle {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    String CAL_COMPLETED = "Calculate completed! Please check the 'bundle result.txt' in same directory!";
+    String NO_SUCH_FILE = "There's no such file named ";
+    String WRITE_FILE_FAILED = "Write file failed.";
+
     public int indexOf(String[] format, String str) {
         int index = -1;
         for (int i = 0; i < format.length; i++) {
@@ -108,12 +112,12 @@ public class Bundle {
             bundleWriter.close();
 
 
-            message = "Calculate completed! Please check the 'bundle result.txt' in same directory!";
+            message = this.CAL_COMPLETED;
         } catch (FileNotFoundException e) {
-            message = "There's no such file named " + filename;
+            message = this.NO_SUCH_FILE + filename;
             e.printStackTrace();
         } catch (IOException e) {
-            message = "Write file failed.";
+            message = this.WRITE_FILE_FAILED;
             e.printStackTrace();
         }
         return message;
