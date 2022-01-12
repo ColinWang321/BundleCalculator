@@ -23,7 +23,8 @@ Format should be like this, a number and a type in one line, separated with a sp
 
 2. Open project in Intellij or other IDEA software, run the main function.
 
-![bundle 2](https://user-images.githubusercontent.com/83932602/148603153-01bb5aa3-6c0c-4bc7-8518-8cc536af05eb.jpg)
+![CODE TEST MAIN](https://user-images.githubusercontent.com/83932602/149178941-da2ad8e4-a6d7-4e8d-9e2a-6ca1eee82551.jpg)
+
 
 
 Result will be stored in a "bundle result.txt" file in project directory.
