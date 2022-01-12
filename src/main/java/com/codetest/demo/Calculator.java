@@ -4,7 +4,7 @@ import lombok.Getter;
 
 
 @Getter
-public class Order {
+public class Calculator {
 
     String[] types = {"IMG", "FLAC", "VID"};
     int[][] bundles = {{10, 5}, {9, 6, 3}, {9, 5, 3}};
