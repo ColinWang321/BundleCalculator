@@ -1,44 +1,44 @@
 package com.codetest.demo;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
 
 import java.util.ArrayList;
 
 class DemoApplicationTests {
 
-	Bundle bundle;
+    Calculator calculator;
 
-	@BeforeEach
-	void setUp() {
-		bundle = new Bundle();
-	}
-
-
+    @BeforeEach
+    void setUp() {
+        calculator = new Calculator();
+    }
 
 
-	@Test
-	void testIndexOfFunction() {
-		String[] strArray = {"Jan", "Feb", "March", "Apr", "May"};
+    @Test
+    void testIndexOfFunction() {
+        String[] strArray = {"Jan", "Feb", "March", "Apr", "May"};
 
-		Assertions.assertEquals(0, bundle.indexOf(strArray, "Jan"));
-		Assertions.assertEquals(4, bundle.indexOf(strArray, "May"));
-		Assertions.assertEquals(2, bundle.indexOf(strArray, "March"));
-		Assertions.assertEquals(3, bundle.indexOf(strArray, "Apr"));
-		Assertions.assertEquals(1, bundle.indexOf(strArray, "Feb"));
+        Assertions.assertEquals(0, calculator.indexOf(strArray, "Jan"));
+        Assertions.assertEquals(4, calculator.indexOf(strArray, "May"));
+        Assertions.assertEquals(2, calculator.indexOf(strArray, "March"));
+        Assertions.assertEquals(3, calculator.indexOf(strArray, "Apr"));
+        Assertions.assertEquals(1, calculator.indexOf(strArray, "Feb"));
 
-	}
+    }
 
-	@Test
-	void testCalBundleFunction() {
-		Order order = new Order();
-		ArrayList<Integer> calculatedNumbers = new ArrayList<>();
-		calculatedNumbers.add(2);
-		calculatedNumbers.add(1);
+    @Test
+    void testBundleCalculatorFunction() {
+        Calculator calculator = new Calculator();
+        BundleInfo bundleInfo = new BundleInfo();
+        OrderItem orderItem = new OrderItem(16, "IMG");
+        ArrayList<Integer> bestBundles = new ArrayList<>();
+        bestBundles.add(1);
+        bestBundles.add(2);
 
-		Assertions.assertEquals(calculatedNumbers, bundle.calBundle(23, "IMG", order));
+        Assertions.assertEquals(bestBundles, calculator.bundleCalculator(orderItem, bundleInfo));
 
-	}
+    }
 
 }
